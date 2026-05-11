@@ -1,15 +1,6 @@
 # PyFileSorter
 
-A zero-dependency CLI tool that organizes messy folders by file type and date (YYYY-MM).
+Smart file organizer by type and date.
 
-## Features
-- Organizes by type + month
-- Dry-run mode
-- Duplicate detection (SHA256)
-- JSON reports
-
-## Usage
-```bash
-python -m pyfilesorter.cli <folder> --dry-run
-python -m pyfilesorter.cli <folder> --apply
-```
+## Quick Start
+python -m pyfilesorter.cli organize <folder> --dry-run
