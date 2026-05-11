@@ -86,8 +86,14 @@ def organize_folder(
         }
     }
 
-    # Collect all files first (skip hidden and the tool itself if inside)
-    all_files: List[Path] = [p for p in source.rglob('*') if p.is_file() and not p.name.startswith('.')]
+    # Collect all files first (skip hidden + report/temp files)
+    SKIP_SUFFIXES = {'.json', '.log', '.tmp', '.bak'}
+    all_files: List[Path] = [
+        p for p in source.rglob('*')
+        if p.is_file()
+        and not p.name.startswith('.')
+        and p.suffix.lower() not in SKIP_SUFFIXES
+    ]
 
     report["summary"]["total_files"] = len(all_files)
 

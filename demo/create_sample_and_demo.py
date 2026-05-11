@@ -79,11 +79,12 @@ def run_demo():
         for f in sorted(source.iterdir()):
             print(f"  - {f.name}")
 
-        # Run dry-run first
+        # Run dry-run first (report outside source to avoid organizing the report itself)
+        dry_report = Path(tmpdir) / "dry_run_report.json"
         print("\n🔍 DRY-RUN MODE:")
         result = subprocess.run(
             ["python", "-m", "pyfilesorter.cli", "organize", str(source),
-             "--dry-run", "--report", str(source / "dry_run_report.json")],
+             "--dry-run", "--report", str(dry_report)],
             capture_output=True, text=True, cwd=Path(__file__).parent.parent
         )
         print(result.stdout)
@@ -91,18 +92,18 @@ def run_demo():
             print(result.stderr)
 
         # Show what the report says
-        report_path = source / "dry_run_report.json"
-        if report_path.exists():
-            with open(report_path) as f:
+        if dry_report.exists():
+            with open(dry_report) as f:
                 report = json.load(f)
             print(f"\n📊 DRY-RUN SUMMARY: {report['summary']['moved_files']} files would move, "
                   f"{report['summary']['duplicate_files']} duplicates detected")
 
-        # Now APPLY
+        # Now APPLY (report outside source)
+        final_report = Path(tmpdir) / "final_report.json"
         print("\n🚀 APPLY MODE (actually moving files):")
         result = subprocess.run(
             ["python", "-m", "pyfilesorter.cli", "organize", str(source),
-             "--apply", "--report", str(source / "final_report.json")],
+             "--apply", "--report", str(final_report)],
             capture_output=True, text=True, cwd=Path(__file__).parent.parent
         )
         print(result.stdout)
@@ -119,14 +120,13 @@ def run_demo():
                 print(f"{subindent}{f}")
 
         # Final report
-        final_report = source / "final_report.json"
         if final_report.exists():
             with open(final_report) as f:
                 report = json.load(f)
             print(f"\n✅ FINAL SUMMARY:")
             print(f"   Moved: {report['summary']['moved_files']}")
             print(f"   Duplicates skipped: {report['summary']['duplicate_files']}")
-            print(f"   Categories: {list(report['summary']['categories'].keys())}")
+            print(f"   Categories: {list(report['summary']['categories'].keys())})")
 
     print("\n" + "=" * 60)
     print("DEMO COMPLETE - PyFileSorter works end-to-end!")
