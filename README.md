@@ -1,6 +1,5 @@
-# PyFileSorter
+Updated with Streamlit UI
 
-Smart file organizer by type and date.
-
-## Quick Start
-python -m pyfilesorter.cli organize <folder> --dry-run
+## How to Run UI
+pip install streamlit
+streamlit run app.py
