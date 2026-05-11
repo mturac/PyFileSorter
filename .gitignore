@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.json
+.DS_Store
+Thumbs.db
+demo/__pycache__/
